@@ -1,5 +1,5 @@
 
-A small Linux systemd helper that keeps selected OpenRazer devices in **driver mode**.
+### A small Linux systemd helper that keeps selected OpenRazer devices in **driver mode**.
 
 
 Some wireless Razer mice can wake from their own internal sleep state and fall back from OpenRazer driver mode:
