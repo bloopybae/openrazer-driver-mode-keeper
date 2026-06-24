@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG_FILE="${CONFIG_FILE:-/etc/openrazer-driver-mode-keeper.conf}"
+
+if [[ -r "$CONFIG_FILE" ]]; then
+  # shellcheck source=/dev/null
+  source "$CONFIG_FILE"
+fi
+
+VENDOR_ID="${VENDOR_ID:-1532}"
+PRODUCT_ID="${PRODUCT_ID:-00B9}"
+INTERVAL_SECONDS="${INTERVAL_SECONDS:-5}"
+
+VENDOR_ID="${VENDOR_ID^^}"
+PRODUCT_ID="${PRODUCT_ID^^}"
+
+if ! [[ "$INTERVAL_SECONDS" =~ ^[0-9]+$ ]] || [[ "$INTERVAL_SECONDS" -lt 1 ]]; then
+  echo "ERROR: INTERVAL_SECONDS must be a positive integer." >&2
+  exit 1
+fi
+
+echo "Starting OpenRazer Driver Mode Keeper for ${VENDOR_ID}:${PRODUCT_ID}"
+echo "Checking every ${INTERVAL_SECONDS} second(s)."
+
+while true; do
+  while IFS= read -r modefile; do
+    current="$(od -An -tx1 -N2 "$modefile" 2>/dev/null | tr -d ' \n' || true)"
+
+    if [[ "$current" != "0300" ]]; then
+      if printf '\x03\x00' > "$modefile" 2>/dev/null; then
+        echo "$(date -Is) Restored driver mode on $modefile; was ${current:-unknown}"
+      else
+        echo "$(date -Is) ERROR: failed to write driver mode to $modefile" >&2
+      fi
+    fi
+  done < <(find /sys/devices -path "*0003:${VENDOR_ID}:${PRODUCT_ID}.*" -name device_mode -print 2>/dev/null)
+
+  sleep "$INTERVAL_SECONDS"
+done

@@ -1,0 +1,13 @@
+[Unit]
+Description=Keep selected OpenRazer device in driver mode
+Documentation=https://github.com/bloopybae/openrazer-driver-mode-keeper
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/openrazer-driver-mode-keeper
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
