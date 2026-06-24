@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-A small Linux systemd helper that keeps selected OpenRazer devices in driver mode.
-=======
-# OpenRazer Driver Mode Keeper
 
 A small Linux systemd helper that keeps selected OpenRazer devices in **driver mode**.
->>>>>>> 61f15ab (Clean up README formatting)
+
 
 Some wireless Razer mice can wake from their own internal sleep state and fall back from OpenRazer driver mode:
 
@@ -138,9 +134,7 @@ sudo rm /etc/openrazer-driver-mode-keeper.conf
 
 This is a workaround for wireless Razer devices that fall out of OpenRazer driver mode after internal sleep/wake behavior.
 
-<<<<<<< HEAD
-=======
+
 ## License
 
->>>>>>> 61f15ab (Clean up README formatting)
 MIT
